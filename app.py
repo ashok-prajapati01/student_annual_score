@@ -2,35 +2,35 @@ import streamlit as st
 import pickle
 import numpy as np
 
-# -----------------------------
+# -------------------------
 # Page Configuration
-# -----------------------------
+# -------------------------
 st.set_page_config(
-    page_title="Student Score Predictor",
-    page_icon="🎓",
+    page_title="ML Model Prediction",
+    page_icon="🤖",
     layout="centered"
 )
 
-# -----------------------------
+# -------------------------
 # Custom CSS
-# -----------------------------
+# -------------------------
 st.markdown("""
 <style>
 
 .stApp{
-    background: linear-gradient(135deg,#1d3557,#457b9d,#a8dadc);
+    background: linear-gradient(135deg,#0f172a,#1e293b,#334155);
 }
 
 .main-card{
     background:white;
     padding:35px;
     border-radius:20px;
-    box-shadow:0px 8px 25px rgba(0,0,0,0.35);
+    box-shadow:0px 8px 30px rgba(0,0,0,0.35);
 }
 
 .title{
     text-align:center;
-    color:#1d3557;
+    color:#2563eb;
     font-size:40px;
     font-weight:bold;
 }
@@ -41,84 +41,61 @@ st.markdown("""
     margin-bottom:20px;
 }
 
-div.stButton > button{
+.stButton>button{
     width:100%;
-    background:#1d3557;
+    background:#2563eb;
     color:white;
     font-size:18px;
-    border-radius:12px;
-    height:50px;
+    border-radius:10px;
+    padding:10px;
     border:none;
 }
 
-div.stButton > button:hover{
-    background:#457b9d;
-    color:white;
+.stButton>button:hover{
+    background:#1d4ed8;
 }
 
-.result{
-    background:#e9f7ef;
-    color:#145a32;
-    padding:18px;
+.prediction{
+    padding:15px;
+    background:#d1fae5;
+    color:#065f46;
     border-radius:12px;
+    font-size:22px;
     text-align:center;
-    font-size:24px;
     font-weight:bold;
-    box-shadow:0px 5px 15px rgba(0,0,0,0.2);
+    margin-top:20px;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# -----------------------------
+# -------------------------
 # Load Model
-# -----------------------------
+# -------------------------
 with open("model.pkl", "rb") as file:
     model = pickle.load(file)
 
-# -----------------------------
+# -------------------------
 # UI
-# -----------------------------
+# -------------------------
 st.markdown('<div class="main-card">', unsafe_allow_html=True)
 
-st.markdown('<p class="title">🎓 Student Score Predictor</p>', unsafe_allow_html=True)
-st.markdown('<p class="subtitle">Predict Final Score using KNN Regression</p>', unsafe_allow_html=True)
+st.markdown('<div class="title">Machine Learning Predictor</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Enter the values below to make a prediction.</div>', unsafe_allow_html=True)
 
-exam1 = st.number_input(
-    "Exam 01 Score",
-    min_value=0.0,
-    max_value=100.0,
-    step=1.0
-)
+feature1 = st.number_input("Feature 1", value=0.0)
+feature2 = st.number_input("Feature 2", value=0.0)
+feature3 = st.number_input("Feature 3", value=0.0)
 
-exam2 = st.number_input(
-    "Exam 02 Score",
-    min_value=0.0,
-    max_value=100.0,
-    step=1.0
-)
+if st.button("Predict"):
 
-exam3 = st.number_input(
-    "Exam 03 Score",
-    min_value=0.0,
-    max_value=100.0,
-    step=1.0
-)
+    input_data = np.array([[feature1, feature2, feature3]])
 
-if st.button("Predict Score"):
-
-    features = np.array([[exam1, exam2, exam3]])
-
-    prediction = model.predict(features)[0]
+    prediction = model.predict(input_data)[0]
 
     st.markdown(
-        f"""
-        <div class="result">
-        Predicted Final Score<br><br>
-        {prediction:.2f}
-        </div>
-        """,
-        unsafe_allow_html=True,
+        f'<div class="prediction">Prediction : {prediction:.4f}</div>',
+        unsafe_allow_html=True
     )
 
 st.markdown("</div>", unsafe_allow_html=True)
